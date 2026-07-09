@@ -1,91 +1,69 @@
 # Axiom Systems
 
-Marketing / inquiry site for Axiom Systems, a web development services
-company. Next.js 16 (App Router, Turbopack), React 19, TypeScript,
-Tailwind CSS v4. No database, no CMS — content lives in one config file.
+Axiom Systems is a modern marketing and inquiry website for a web development services company. It is designed to present the company's services, development process, and core principles while providing potential clients with a simple way to get in touch for new projects.
 
-## Stack
+The project follows a configuration-driven architecture where most website content—including navigation, hero content, services, company principles, process timeline, and contact options—is managed from a single configuration file. This makes the site easy to customize and reuse for future iterations without modifying the UI components.
 
-- **Next.js 16.2 LTS** — App Router, Turbopack (default bundler, no flag needed)
-- **React 19**
-- **Tailwind CSS v4** — CSS-first config via `@theme`, no `tailwind.config.js`
-- **TypeScript**, strict mode
+## Features
 
-Versions confirmed current as of July 2026. Next.js 16 dropped `next lint`
-(use Biome or ESLint directly if you want linting) and removed AMP support;
-neither is used here.
+* Modern, responsive landing page
+* Service showcase
+* Company principles section
+* Development process timeline
+* Contact/inquiry form with server-side validation
+* Configuration-driven content management
+* Clean and maintainable component architecture
+* Optimized for performance with Next.js App Router
 
-## Getting started
+## Tech Stack
 
-```bash
-npm install
-npm run dev
+* Next.js 16 (App Router)
+* React 19
+* TypeScript
+* Tailwind CSS v4
+* Turbopack
+* Route Handlers (API)
+
+## Project Structure
+
+```text
+src/
+├── app/
+│   ├── api/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
+├── components/
+│   ├── layout/
+│   ├── sections/
+│   └── ui/
+├── config/
+│   └── site.config.ts
+├── lib/
+├── types/
+└── ...
 ```
 
-Open http://localhost:3000. First run generates `next-env.d.ts` and
-downloads the Google Fonts used (Space Grotesk, Inter, IBM Plex Mono) —
-that requires network access to fonts.googleapis.com at build time.
+## Content Configuration
 
-```bash
-npm run build   # production build
-npm run start   # serve the production build
-npm run typecheck
-```
+Website content is centralized in:
 
-## Reconfiguring the site
-
-Everything you'd change per client or per update lives in one file:
-
-```
+```text
 src/config/site.config.ts
 ```
 
-Nav links, hero copy, services, the "axiom" principles, the process
-timeline, and contact form options are all read from there — page and
-section components don't need to change. Edit the object, save, done.
+This file contains the site's navigation, hero content, services, company principles, development process, and contact information. Updating this configuration automatically updates the corresponding sections throughout the website.
 
-Field shapes are typed in `src/types/site.ts`, so TypeScript will flag
-anything you leave out.
+## Contact Form
 
-## Contact form
+The contact form submits inquiries through an API route located at:
 
-`src/components/sections/Contact.tsx` posts to `src/app/api/contact/route.ts`.
-The route validates the payload and currently just logs it server-side —
-it has no dependency on an email provider so the project stays install-light
-by default. To actually deliver submissions, pick one:
-
-- **Resend** (matches the `.env.example` stub, and the pattern used on the
-  Margallo LMS project): install `resend`, set `RESEND_API_KEY`, uncomment
-  the example block in `route.ts`.
-- Any other provider (SMTP, SES, a CRM webhook) — same file, same spot.
-
-## Project structure
-
+```text
+src/app/api/contact/route.ts
 ```
-src/
-├── app/
-│   ├── layout.tsx          # fonts, metadata, <html>/<body>
-│   ├── page.tsx             # assembles sections in order
-│   ├── globals.css          # Tailwind v4 theme tokens + brand utilities
-│   └── api/contact/route.ts # inquiry form handler
-├── components/
-│   ├── layout/               # Header, Footer
-│   ├── sections/              # Hero, About, Services, Principles, Process, Contact
-│   └── ui/                    # Container, Button, Eyebrow — small primitives
-├── config/
-│   └── site.config.ts       # <- edit this to reconfigure the site
-├── lib/
-│   └── utils.ts              # cn() classname helper
-└── types/
-    └── site.ts               # SiteConfig type used by site.config.ts
-```
+
+By default, submissions are validated and processed server-side. The endpoint can be extended to integrate with email providers, CRM platforms, or webhook-based workflows.
 
 ## Design
 
-Almost-white canvas (`#ffffff`) with a light cyan accent (Tailwind's
-default `cyan` scale) and a near-black ink color for text. The recurring
-signature motif is a faint blueprint-style grid behind the hero, and
-numbered "AXIOM 0N" principle cards — both a nod to the name (an axiom is
-a foundational, self-evident statement) rather than decoration. Fonts:
-Space Grotesk (display), Inter (body), IBM Plex Mono (labels/numbers),
-loaded via `next/font/google` (self-hosted at build, no runtime requests).
+The interface follows a clean, modern aesthetic centered around simplicity and professionalism. A white canvas, cyan accents, and subtle blueprint-inspired elements reinforce the company's engineering-focused identity while maintaining readability and accessibility across devices.
