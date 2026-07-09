@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 interface ContactPayload {
   name?: string;
@@ -45,22 +48,26 @@ export async function POST(request: Request) {
     receivedAt: new Date().toISOString(),
   };
 
-  // TODO: deliver the inquiry somewhere durable. This stub only logs it.
-  //
-  // Wire up an email provider once RESEND_API_KEY is set (see .env.example):
-  //
-  //   import { Resend } from "resend";
-  //   const resend = new Resend(process.env.RESEND_API_KEY);
-  //   await resend.emails.send({
-  //     from: "Axiom Systems <inquiries@axiomsystems.dev>",
-  //     to: process.env.CONTACT_TO_EMAIL!,
-  //     subject: `New inquiry from ${inquiry.name}`,
-  //     text: JSON.stringify(inquiry, null, 2),
-  //   });
-  //
-  // Or persist to a database / forward to a CRM instead — this is the
-  // only place that needs to change.
-  console.log("[contact] new inquiry:", inquiry);
+  const { error } = await resend.emails.send({
+    from: "Axiom Systems <onboarding@resend.dev>", // swap to a verified domain address later
+    to: process.env.CONTACT_TO_EMAIL!,
+    replyTo: inquiry.email,
+    subject: `New inquiry from ${inquiry.name}`,
+    text: [
+      `Name: ${inquiry.name}`,
+      `Email: ${inquiry.email}`,
+      `Company: ${inquiry.company ?? "-"}`,
+      `Project type: ${inquiry.projectType ?? "-"}`,
+      `Budget: ${inquiry.budget ?? "-"}`,
+      "",
+      inquiry.message,
+    ].join("\n"),
+  });
+
+  if (error) {
+    console.error("[contact] resend error:", error);
+    return NextResponse.json({ error: "Failed to send. Try again later." }, { status: 502 });
+  }
 
   return NextResponse.json({ ok: true });
 }

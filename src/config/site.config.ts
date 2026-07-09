@@ -14,7 +14,7 @@ export const siteConfig: SiteConfig = {
   tagline: "Web systems, built on solid foundations.",
   description:
     "Axiom Systems designs and builds custom web applications, internal tools, and digital platforms shaped around how your business actually operates.",
-  url: "https://axiomsystems.dev",
+  url: "https://axiom-systems.3-91-173-6.sslip.io",
 
   nav: [
     { label: "Services", href: "#services" },
@@ -154,7 +154,7 @@ export const siteConfig: SiteConfig = {
     heading: "Tell us what you're building.",
     subheading:
       "General inquiry or a scoped project — either way, send the details and we'll follow up.",
-    email: "hello@axiomsystems.dev",
+    email: "petermadrid0421@gmail.com",
     responseTime: "We reply within 1–2 business days.",
     projectTypeOptions: [
       "Custom Web Application",
